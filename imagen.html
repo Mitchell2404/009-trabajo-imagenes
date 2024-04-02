@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sube tu imagen</title>
+</head>
+<body>
+    <h1>Sube tu imagen</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="image">Selecciona una imagen:</label><br>
+        <input type="file" id="image" name="image" accept="image/*"><br>
+        <button type="button" onclick="uploadImage()">Subir imagen</button>
+        <link rel="stylesheet" href="imagen.css" />
+    </form>
+
+    <div id="imageContainer"></div>
+
+    <script>
+        function uploadImage() {
+            var form = document.getElementById('uploadForm');
+            var formData = new FormData(form);
+            var apiKey = 'bf38362fea71c54bdbdfd8dafa8f147b'; // Reemplaza esto con tu propia API key de ImgBB
+
+            fetch('https://api.imgbb.com/1/upload?key=' + apiKey, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var imageUrl = data.data.url;
+                    console.log(data);
+                    var htmlCodeFull = 'El url de la imagen es: </p> ' + imageUrl;
+                    document.getElementById('imageContainer').innerHTML = htmlCodeFull;
+                } else {
+                    alert('Error al cargar la imagen.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
+
+<!--
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const formData = new FormData(this);
+  const apiKey = 'bf38362fea71c54bdbdfd8dafa8f147b';
+
+  fetch('https://api.imgbb.com/1/upload?key=' + apiKey, {
+    method: 'POST',
+    body: formData
+  })
+});
+-->
